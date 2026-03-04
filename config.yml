@@ -1,0 +1,88 @@
+preprocessing:
+  raw_data_path: storage/raw/Filtered_Sheffield_Traffic_Data.csv
+  cleaned_data_path: storage/processed/Sheffield_Traffic_Data_Processed.csv
+  sentinel_value: -1
+  knn_neighbors: 5
+  random_state: 42
+  drop_cols:
+    - collision_ref_no # redundant
+    - police_force # constant (always 14 = South Yorkshire)
+    - local_authority_district # constant (always 215)
+    - local_authority_ons_district # near-constant
+    - local_authority_highway # near-constant
+    - junction_detail_historic # superseded by junction_detail
+    - pedestrian_crossing_human_control_historic # superseded
+    - pedestrian_crossing_physical_facilities_historic # superseded
+    - carriageway_hazards_historic # superseded by carriageway_hazards
+    - enhanced_severity_collision # almost entirely -1 (7322/7933)
+    - collision_adjusted_severity_serious # >5000 missing
+    - collision_adjusted_severity_slight # >5000 missing
+    - lsoa_of_accident_location # high-cardinality string ID
+  sentinel_categorical_cols:
+    - junction_control
+    - second_road_class
+    - pedestrian_crossing
+    - road_surface_conditions
+    - special_conditions_at_site
+    - carriageway_hazards
+    - urban_or_rural_area
+    - trunk_road_flag
+    - collision_injury_base
+  # Cols where -1 should just be treated as a valid "unknown" category (not imputed)
+  sentinel_keep_as_category:
+    - did_police_officer_attend_scene_of_accident
+    - second_road_number
+  knn_impute_cols:
+    - location_easting_osgr
+    - location_northing_osgr
+  scale_cols:
+    - location_easting_osgr
+    - location_northing_osgr
+  outlier_cols:
+    - number_of_vehicles
+    - number_of_casualties
+    - location_easting_osgr
+    - location_northing_osgr
+  iqr_multiplier: 1.5
+
+supervised:
+  target_col: collision_severity
+  test_size: 0.2
+  random_state: 42
+  smote_random_state: 42
+  cv_folds: 5
+  leakage_drop_cols:
+    - collision_index
+    - collision_injury_based
+    - local_authority_highway_current
+  models:
+    logistic_regression:
+      max_iter: 1000
+      class_weight: balanced
+    random_forest:
+      n_estimators: [100, 200, 300]
+      max_depth: [5, 10, 20, null]
+      min_samples_split: [2, 5, 10]
+    xgboost:
+      learning_rate: [0.01, 0.1, 0.2]
+      max_depth: [3, 5, 7]
+      n_estimators: [100, 200]
+      subsample: [0.8, 1.0]
+    svm:
+      kernel: rbf # lowkey i got one
+      class_weight: balanced
+      C: [0.1, 1, 10]
+    knn:
+      n_neighbors: [3, 5, 7, 9, 11]
+
+regression:
+  target_col: number_of_casualties
+  test_size: 0.2
+  random_state: 42
+  cv_folds: 5
+
+unsupervised:
+  random_state: 42
+  kmeans_k_range: [2, 3, 4, 5, 6, 7, 8]
+  dbscan_eps: 0.5
+  dbscan_min_samples: 5
