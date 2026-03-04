@@ -1,0 +1,24 @@
+plotting:
+  palette: Set2
+  figsize_wide: [14, 5]
+  figsize_square: [10, 8]
+  figsize_tall: [10, 12]
+
+labels:
+  severity:
+    1: Fatal
+    2: Serious
+    3: Slight
+  time_period:
+    0: Morning
+    1: Afternoon
+    2: Evening
+    3: Night
+  day_of_week:
+    1: Sunday
+    2: Monday
+    3: Tuesday
+    4: Wednesday
+    5: ThursdayP
+    6: Friday
+    7: Saturday
