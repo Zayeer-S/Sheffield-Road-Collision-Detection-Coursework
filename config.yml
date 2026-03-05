@@ -1,6 +1,6 @@
 preprocessing:
   raw_data_path: storage/raw/Filtered_Sheffield_Traffic_Data.csv
-  cleaned_data_path: storage/processed/Sheffield_Traffic_Data_Processed.csv
+  output_path: storage/processed/Sheffield_Traffic_Data_Processed.csv
   sentinel_value: -1
   knn_neighbors: 5
   random_state: 42
