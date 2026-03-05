@@ -7,6 +7,7 @@
       "source.organizeImports.ruff": "explicit"
     }
   },
+  "python.languageServer": "Pylance",
   "python.typeChecking": "off",
   "mypy-type-checker.configFile": "pyproject.toml",
   "ruff.configFile": "pyproject.toml"
